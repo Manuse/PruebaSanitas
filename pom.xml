@@ -49,8 +49,6 @@
 			<groupId>tracer</groupId>
 			<artifactId>tracer</artifactId>
 			<version>1.0.0</version>
-<!-- 			<scope>system</scope> -->
-<!-- 			<systemPath>${pom.basedir}\libs\tracer-1.0.0.jar</systemPath> -->
 		</dependency>
 
 		<!-- swagger -->
