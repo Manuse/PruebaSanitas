@@ -1,44 +1,51 @@
 package com.pruebasanitas.calculadora.controllers;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.pruebasanitas.calculadora.services.CalculadoraService;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 public class CalculadoraControllerTest {
 
-	@Autowired
-	private MockMvc mvc;
+	@InjectMocks
+	private CalculadoraController calculadoraController;
 
-	@MockBean
+	@Mock
 	private CalculadoraService calculadoraService;
 
 	@Test
 	public void sumarTest() throws Exception {
-		when(calculadoraService.sumar(Mockito.anyDouble(), Mockito.anyDouble())).thenReturn(5d);
-		this.mvc.perform(get("/sumar").param("actual", "1").param("suma", "4"))
-				.andExpect(status().isOk()).andExpect(content().string("5.0"));
+		when(calculadoraService.sumar(Mockito.anyString(), Mockito.anyString())).thenReturn(5d);
+		assertEquals(200, calculadoraController.restar("1", "4").getStatusCodeValue());
+		assertEquals(5d, calculadoraController.sumar("1", "4").getBody());
 	}
 
 	@Test
-	public void restarTest() throws Exception {
-		when(calculadoraService.restar(Mockito.anyDouble(), Mockito.anyDouble())).thenReturn(5d);
-		this.mvc.perform(get("/restar").param("actual", "9").param("resta", "4"))
-				.andExpect(status().isOk()).andExpect(content().string("5.0"));
+	public void restarTest() {
+		when(calculadoraService.restar(Mockito.anyString(), Mockito.anyString())).thenReturn(5d);
+		assertEquals(200, calculadoraController.restar("9", "4").getStatusCodeValue());
+		assertEquals(5d, calculadoraController.restar("9", "4").getBody());
+	}
+
+	@Test
+	public void dividirTest() {
+		RuntimeException ex = assertThrows(UnsupportedOperationException.class, () -> calculadoraController.dividir("9", "4"));
+		assertEquals(ex.getMessage(), "Operación no soportada");
+
+	}
+
+	@Test
+	public void multiplicarTest() {
+		RuntimeException ex = assertThrows(UnsupportedOperationException.class, () -> calculadoraController.multiplicar("9", "4"));
+		assertEquals(ex.getMessage(), "Operación no soportada");
 	}
 }

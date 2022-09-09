@@ -22,13 +22,49 @@ public class CalculadoraControllerIntegrationTest {
 
 	@Test
 	public void sumarTest() throws Exception {
-		this.mvc.perform(get("/sumar").param("actual", "1").param("suma", "4"))
+		mvc.perform(get("/sumar").param("actual", "1").param("suma", "4"))
 				.andExpect(status().isOk()).andExpect(content().string("5.0"));
 	}
 
 	@Test
 	public void restarTest() throws Exception {
-		this.mvc.perform(get("/restar").param("actual", "9").param("resta", "4"))
+		mvc.perform(get("/restar").param("actual", "9").param("resta", "4"))
 				.andExpect(status().isOk()).andExpect(content().string("5.0"));
+	}
+
+	@Test
+	public void sumarExceptionTest() throws Exception {
+		mvc.perform(get("/sumar")
+				.param("actual", "a")
+				.param("suma", "4"))
+		.andExpect(status().isNotAcceptable())
+		.andExpect(content().string("Unos de los datos introducidos no es un número"));
+	}
+
+	@Test
+	public void restarExceptionTest() throws Exception {
+		mvc.perform(get("/restar")
+				.param("actual", "9")
+				.param("resta", "z"))
+		.andExpect(status().isNotAcceptable())
+		.andExpect(content().string("Unos de los datos introducidos no es un número"));
+	}
+
+	@Test
+	public void multiplicarExceptionTest() throws Exception {
+		mvc.perform(get("/multiplicar")
+				.param("actual", "9")
+				.param("multiplica", "4"))
+		.andExpect(status().isMethodNotAllowed())
+		.andExpect(content().string("Operación no soportada"));
+	}
+
+	@Test
+	public void dividirExceptionTest() throws Exception {
+		mvc.perform(get("/dividir")
+				.param("actual", "9")
+				.param("divide", "4"))
+		.andExpect(status().isMethodNotAllowed())
+		.andExpect(content().string("Operación no soportada"));
 	}
 }

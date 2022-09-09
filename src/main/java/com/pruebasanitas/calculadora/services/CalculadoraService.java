@@ -2,8 +2,8 @@ package com.pruebasanitas.calculadora.services;
 
 public interface CalculadoraService {
 
-	public double sumar(double actual, double suma);
+	public double sumar(String actual, String suma);
 
-	public double restar(double actual, double resta);
+	public double restar(String actual, String resta);
 
 }

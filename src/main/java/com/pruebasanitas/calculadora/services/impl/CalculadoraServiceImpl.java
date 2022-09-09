@@ -1,11 +1,14 @@
 package com.pruebasanitas.calculadora.services.impl;
 
 import java.math.BigDecimal;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pruebasanitas.calculadora.enums.OperacionesEnum;
+import com.pruebasanitas.calculadora.exceptions.ValidationException;
 import com.pruebasanitas.calculadora.services.CalculadoraService;
 
 import io.corp.calculator.TracerAPI;
@@ -16,19 +19,23 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 	@Autowired
 	private TracerAPI traceApi;
 
+	private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+
 	@Override
-	public double sumar(double actual, double suma) {
+	public double sumar(String actual, String suma) {
+		validateOnlyNumber(actual, suma);
 		return calcular(actual, suma, OperacionesEnum.SUMAR);
 	}
 
 	@Override
-	public double restar(double actual, double resta) {
+	public double restar(String actual, String resta) {
+		validateOnlyNumber(actual, resta);
 		return calcular(actual, resta, OperacionesEnum.RESTAR);
 	}
 
-	private double calcular(double numero1, double numero2, OperacionesEnum operacion) {
-		BigDecimal bdNumero1 = BigDecimal.valueOf(numero1);
-		BigDecimal bdNumero2 = BigDecimal.valueOf(numero2);
+	private double calcular(String numero1, String numero2, OperacionesEnum operacion) {
+		BigDecimal bdNumero1 = new BigDecimal(numero1.replace(",", "."));
+		BigDecimal bdNumero2 = new BigDecimal(numero2.replace(",", "."));
 		BigDecimal resultado = BigDecimal.ZERO;
 
 		switch (operacion) {
@@ -47,5 +54,20 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 
 		return resultado.doubleValue();
 
+	}
+
+	private void validateOnlyNumber(String... numbers) {
+		if(Stream.of(numbers)
+		.map(n -> n.replace(",", "."))
+		.anyMatch(this::isNonNumeric)){
+			throw new ValidationException("Unos de los datos introducidos no es un número");
+		}
+	}
+
+	private boolean isNonNumeric(String strNum) {
+	    if (strNum == null || strNum.isEmpty()) {
+	        return true;
+	    }
+	    return !pattern.matcher(strNum).matches();
 	}
 }
