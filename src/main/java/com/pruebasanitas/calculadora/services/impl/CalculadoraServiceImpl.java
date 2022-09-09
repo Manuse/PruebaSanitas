@@ -19,7 +19,7 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 	@Autowired
 	private TracerAPI traceApi;
 
-	private Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
+	private final Pattern PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
 
 	@Override
 	public double sumar(String actual, String suma) {
@@ -58,7 +58,7 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 
 	private void validateOnlyNumber(String... numbers) {
 		if(Stream.of(numbers)
-		.map(n -> n.replace(",", "."))
+		.map(n -> n != null ? n.replace(",", ".") : null)
 		.anyMatch(this::isNonNumeric)){
 			throw new ValidationException("Unos de los datos introducidos no es un número");
 		}
@@ -68,6 +68,6 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 	    if (strNum == null || strNum.isEmpty()) {
 	        return true;
 	    }
-	    return !pattern.matcher(strNum).matches();
+	    return !PATTERN.matcher(strNum).matches();
 	}
 }
