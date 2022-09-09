@@ -65,7 +65,7 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 	}
 
 	private boolean isNonNumeric(String strNum) {
-	    if (strNum == null || strNum.isEmpty()) {
+	    if (strNum == null) {
 	        return true;
 	    }
 	    return !PATTERN.matcher(strNum).matches();
