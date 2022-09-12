@@ -36,7 +36,7 @@ public class CalculadoraServiceTest {
 
 	@Test
 	public void restarExceptionTest() {
-		RuntimeException ex = assertThrows(ValidationException.class, () -> calculadoraService.restar(null, "1"));
+		RuntimeException ex = assertThrows(ValidationException.class, () -> calculadoraService.restar(null, "s"));
 		assertEquals(ex.getMessage(), "Unos de los datos introducidos no es un número");
 	}
 

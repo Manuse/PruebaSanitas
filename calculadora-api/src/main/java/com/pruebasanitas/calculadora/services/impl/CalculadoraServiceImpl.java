@@ -1,6 +1,7 @@
 package com.pruebasanitas.calculadora.services.impl;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -19,7 +20,7 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 	@Autowired
 	private TracerAPI traceApi;
 
-	private final Pattern PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
+	private final static Pattern PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
 
 	@Override
 	public double sumar(String actual, String suma) {
@@ -65,9 +66,6 @@ public class CalculadoraServiceImpl implements CalculadoraService {
 	}
 
 	private boolean isNonNumeric(String strNum) {
-	    if (strNum == null) {
-	        return true;
-	    }
-	    return !PATTERN.matcher(strNum).matches();
+		return Optional.ofNullable(strNum).map(s -> !PATTERN.matcher(strNum).matches()).orElse(true);
 	}
 }

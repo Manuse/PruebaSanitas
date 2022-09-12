@@ -1,0 +1,119 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Local
+paths:
+  /sumar:
+    get:
+      tags:
+      - operacion
+      description: Suma 2 números pasados por parámetros
+      operationId: sumar
+      parameters:
+      - name: actual
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: suma
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Suma realizada correctamente
+          content:
+            'application/json':
+              schema:
+                type: number
+                format: double
+        "406":
+          description: Error en algún número introducido
+          content:
+            'text/plain':
+              schema:
+                type: string
+  /restar:
+    get:
+      tags:
+      - operacion
+      description: Resta 2 números pasados por parámetros
+      operationId: restar
+      parameters:
+      - name: actual
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: resta
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Resta realizada correctamente
+          content:
+            'application/json':
+              schema:
+                type: number
+                format: double
+        "406":
+          description: Error en algún número introducido
+          content:
+            'text/plain':
+              schema:
+                type: string
+  /multiplicar:
+    get:
+      tags:
+      - operacion
+      description: Multiplica 2 números pasados por parámetros
+      operationId: multiplicar
+      parameters:
+      - name: actual
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: multiplica
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "405":
+          description: Operación aún no permitida
+          content:
+            'text/plain':
+              schema:
+                type: string
+  /dividir:
+    get:
+      tags:
+      - operacion
+      description: Divide 2 números pasados por parámetros
+      operationId: dividir
+      parameters:
+      - name: actual
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: divide
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "405":
+          description: Operación aún no permitida
+          content:
+            'text/plain':
+              schema:
+                type: string
+components: {}
